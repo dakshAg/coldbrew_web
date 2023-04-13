@@ -8,7 +8,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 
 
-export default function Home(props: any) {
+export default function Home(props) {
   const router = useRouter();
   const camera = useRef(null);
   const [numberOfCameras, setNumberOfCameras] = useState(0);
@@ -29,14 +29,14 @@ export default function Home(props: any) {
   }, [mobileScreen, ratio])
 
   const capture = () => {
-    if(camera.current!=null){
-      const imageSrc = camera.current.takePhoto();
-      rotateImage(imageSrc, 90, (image: any) => {
-        setImage(image);
-        localStorage.setItem('myPhoto', image);
-        router.push("/result_photo");
-      });
-    }
+
+    const imageSrc = camera.current?.takePhoto();
+    rotateImage(imageSrc, 90, (image) => {
+      setImage(image);
+      localStorage.setItem('myPhoto', image);
+      router.push("/result_photo");
+    });
+
   };
 
   const errorMessages = {
@@ -47,7 +47,7 @@ export default function Home(props: any) {
     canvas: 'Canvas is not supported.'
   }
 
-  const rotateImage = (imageBase64: any, rotation: any, cb: any) => {
+  const rotateImage = (imageBase64, rotation, cb) => {
     var img = new Image();
     img.src = imageBase64;
     img.onload = () => {
@@ -55,9 +55,9 @@ export default function Home(props: any) {
       canvas.width = img.width;
       canvas.height = img.height;
       var ctx = canvas.getContext("2d");
-      ctx!.translate(canvas.width, 0);
-      ctx!.scale(-1, 1);
-      ctx!.drawImage(img, 0, 0);
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(img, 0, 0);
       cb(canvas.toDataURL("image/jpeg"));
     };
   };
