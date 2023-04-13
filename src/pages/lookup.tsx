@@ -2,13 +2,16 @@ import React, { useState, useRef, useEffect } from "react";
 import {Camera} from "react-camera-pro";
 import { useRouter } from "next/router";
 import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { CameraAlt } from '@mui/icons-material';
 
-export default function Home(props) {
+
+export default function Home(props:any) {
   const router = useRouter();
   const camera = useRef(null);
   const [numberOfCameras, setNumberOfCameras] = useState(0);
   const [image, setImage] = useState(null);
-  const [mobileScreen] = useMediaQuery('(min-width: 600px)');
+  const mobileScreen = useMediaQuery('(min-width: 600px)');
   const [ratio, setRatio] = useState(9 / 16);
 
   useEffect(()=>{
@@ -17,7 +20,7 @@ export default function Home(props) {
       setRatio(9 / 16);
     }
     else{
-      setRatio("cover");
+      
       // setRatio(9 / 16);
     }
 
@@ -25,14 +28,22 @@ export default function Home(props) {
 
   const capture = () => {
     const imageSrc = camera.current.takePhoto();
-    rotateImage(imageSrc, 90, (image) => {
+    rotateImage(imageSrc, 90, (image:any) => {
       setImage(image);
       localStorage.setItem('myPhoto', image);
       router.push("/result_photo");
     });
   };
 
-  const rotateImage = (imageBase64, rotation, cb) => {
+  const errorMessages = {
+    noCameraAccessible: 'No camera device accessible. Please connect your camera or try a different browser.',
+    permissionDenied: 'Permission denied. Please refresh and give camera permission.',
+    switchCamera:
+    'It is not possible to switch camera to different one because there is only one video device accessible.',
+    canvas: 'Canvas is not supported.'
+  }
+
+  const rotateImage = (imageBase64:any, rotation:any, cb:any) => {
     var img = new Image();
     img.src = imageBase64;
     img.onload = () => {
@@ -40,9 +51,9 @@ export default function Home(props) {
       canvas.width = img.width;
       canvas.height = img.height;
       var ctx = canvas.getContext("2d");
-      ctx.translate(canvas.width, 0);
-      ctx.scale(-1, 1);
-      ctx.drawImage(img, 0, 0);
+      ctx!.translate(canvas.width, 0);
+      ctx!.scale(-1, 1);
+      ctx!.drawImage(img, 0, 0);
       cb(canvas.toDataURL("image/jpeg"));
     };
   };
@@ -64,21 +75,11 @@ export default function Home(props) {
   return (
     <Box>
       <Box>
-        <Box maxW='sm'
-          mt={{ base: '0px', md: '10px', lg: '10px' }} 
-          height={{ base: '100%', md: '50%', lg: '25%'}}
-          width={{ base: '600px', md: '50%', lg: '25%', }} 
-          borderWidth={{base: '0px', md: '1px', lg: '1px'}}
-          bg='teal.400'
-          justifyContent="center" 
-          overflow='hidden' 
-          position={{base: '', md: '', lg: 'relative'}}
-          borderRadius='lg' 
-          rounded={{base: 'none', md: '24', lg: '24'}}>         
+        <Box>         
           <Box sx={{ display: 'flex' }}>
             <Box>
-              <Camera ref={camera} numberOfCamerasCallback={setNumberOfCameras} facingMode="user" aspectRatio={ratio} />
-              <img src="/camera.svg" width="70px" height="70px" alt="Logo" style={imageCamera} onClick={capture}/> 
+              <Camera ref={camera} numberOfCamerasCallback={setNumberOfCameras} facingMode="user" aspectRatio={ratio} errorMessages={errorMessages}/>
+              <CameraAlt onClick={capture}/>
             </Box>
           </Box>
         </Box>
