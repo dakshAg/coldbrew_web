@@ -29,12 +29,14 @@ export default function Home(props: any) {
   }, [mobileScreen, ratio])
 
   const capture = () => {
-    const imageSrc = camera.current.takePhoto();
-    rotateImage(imageSrc, 90, (image: any) => {
-      setImage(image);
-      localStorage.setItem('myPhoto', image);
-      router.push("/result_photo");
-    });
+    if(camera.current!=null){
+      const imageSrc = camera.current.takePhoto();
+      rotateImage(imageSrc, 90, (image: any) => {
+        setImage(image);
+        localStorage.setItem('myPhoto', image);
+        router.push("/result_photo");
+      });
+    }
   };
 
   const errorMessages = {
