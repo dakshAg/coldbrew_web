@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import {Camera} from "react-camera-pro";
+import { Camera } from "react-camera-pro";
 import { useRouter } from "next/router";
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import { Grid } from "@mui/material";
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { CameraAlt } from '@mui/icons-material';
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 
 
-export default function Home(props:any) {
+export default function Home(props: any) {
   const router = useRouter();
   const camera = useRef(null);
   const [numberOfCameras, setNumberOfCameras] = useState(0);
@@ -14,13 +16,13 @@ export default function Home(props:any) {
   const mobileScreen = useMediaQuery('(min-width: 600px)');
   const [ratio, setRatio] = useState(9 / 16);
 
-  useEffect(()=>{
+  useEffect(() => {
     //set ratio camera
-    if(mobileScreen){
+    if (mobileScreen) {
       setRatio(9 / 16);
     }
-    else{
-      
+    else {
+
       // setRatio(9 / 16);
     }
 
@@ -28,7 +30,7 @@ export default function Home(props:any) {
 
   const capture = () => {
     const imageSrc = camera.current.takePhoto();
-    rotateImage(imageSrc, 90, (image:any) => {
+    rotateImage(imageSrc, 90, (image: any) => {
       setImage(image);
       localStorage.setItem('myPhoto', image);
       router.push("/result_photo");
@@ -39,11 +41,11 @@ export default function Home(props:any) {
     noCameraAccessible: 'No camera device accessible. Please connect your camera or try a different browser.',
     permissionDenied: 'Permission denied. Please refresh and give camera permission.',
     switchCamera:
-    'It is not possible to switch camera to different one because there is only one video device accessible.',
+      'It is not possible to switch camera to different one because there is only one video device accessible.',
     canvas: 'Canvas is not supported.'
   }
 
-  const rotateImage = (imageBase64:any, rotation:any, cb:any) => {
+  const rotateImage = (imageBase64: any, rotation: any, cb: any) => {
     var img = new Image();
     img.src = imageBase64;
     img.onload = () => {
@@ -73,17 +75,17 @@ export default function Home(props:any) {
   }
 
   return (
-    <Box>
+    <Stack spacing={2}>
       <Box>
-        <Box>         
-          <Box sx={{ display: 'flex' }}>
-            <Box>
-              <Camera ref={camera} numberOfCamerasCallback={setNumberOfCameras} facingMode="user" aspectRatio={ratio} errorMessages={errorMessages}/>
-              <CameraAlt onClick={capture}/>
-            </Box>
-          </Box>
-        </Box>
+        <Camera ref={camera} numberOfCamerasCallback={setNumberOfCameras} facingMode="user" aspectRatio={ratio} errorMessages={errorMessages} />
       </Box>
-    </Box>
+
+      <Box display="flex" alignItems="center"
+        justifyContent="center">
+        <CircleOutlinedIcon onClick={capture} sx={{ height: 60, width: 60, zIndex: 'fab', color: 'black' }} />
+      </Box>
+
+
+    </Stack>
   );
 }
