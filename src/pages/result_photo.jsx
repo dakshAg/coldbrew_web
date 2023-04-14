@@ -45,7 +45,7 @@ export default function ResultPhoto() {
   };
 
   return (
-    <>
+    <Box sx={{ maxWidth: 1200, margin: '0 auto' }}>
       <Grid container sx={{ backgroundImage: 'url(/green-backdrop.jpeg)', p: 2 }}>
         <Typography sx={{ color: '#566573', fontSize: 14 }}>
           A Simple Duck
@@ -71,7 +71,7 @@ export default function ResultPhoto() {
 
 
       </Grid>
-      <Card sx={{backgroundColor:'#F7DC6F', m:2, p:2}}>
+      <Card sx={{ backgroundColor: '#F7DC6F', m: 2, p: 2 }}>
         <Typography sx={{ color: '#7D6608', fontSize: 14 }}>
           Disposal
         </Typography>
@@ -82,6 +82,6 @@ export default function ResultPhoto() {
           <Image src="/yellow-dustbin.png" alt="A Yellow Dustbin" height={60} width={60}></Image>
         </Stack>
       </Card>
-    </>
+    </Box>
   );
 }

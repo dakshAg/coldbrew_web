@@ -13,7 +13,7 @@ export default function Home(props) {
   const camera = useRef(null);
   const [numberOfCameras, setNumberOfCameras] = useState(0);
   const [image, setImage] = useState(null);
-  const mobileScreen = useMediaQuery('(min-width: 600px)');
+  const mobileScreen = useMediaQuery('(max-width: 599px)');
   const [ratio, setRatio] = useState(9 / 16);
 
   useEffect(() => {
@@ -22,11 +22,9 @@ export default function Home(props) {
       setRatio(9 / 16);
     }
     else {
-
-      // setRatio(9 / 16);
+      setRatio(4 / 3);
     }
-
-  }, [mobileScreen, ratio])
+  }, [mobileScreen])
 
   const capture = () => {
 
@@ -72,22 +70,30 @@ export default function Home(props) {
     position: "absolute",
     "width": "100%",
     "height": "100%",
-    // "background-position": "center",
     "top": "0",
   }
 
   return (
-    <Stack spacing={2}>
-      <Box>
-        <Camera ref={camera} numberOfCamerasCallback={setNumberOfCameras} facingMode="user" aspectRatio={ratio} errorMessages={errorMessages} />
-      </Box>
+    <Box sx={{ flexGrow: 1, height: '100vh', overflow: 'hidden' }}>
+      <Grid container direction="column" sx={{ height: '100%' }}>
+        <Grid item xs sx={{ position: 'relative', flexGrow: 1 }}>
+          <Camera ref={camera} numberOfCamerasCallback={setNumberOfCameras} facingMode="user" aspectRatio={ratio} errorMessages={errorMessages} />
+          {!mobileScreen && (
+            <Box sx={cameraMarking}>
+              <svg width="100%" height="100%">
+                <rect x="0" y="0" width="100%" height="100%" fill="transparent" strokeWidth="2" stroke="white" />
+              </svg>
+            </Box>
+          )}
+        </Grid>
+        <Grid item sx={{ position: 'relative' }}>
+          <Box display="flex" alignItems="center" justifyContent="center" sx={{ position: mobileScreen ? 'fixed' : 'absolute', bottom: mobileScreen ? '20px' : '40px', left: '50%', transform: 'translate' }} />
 
-      <Box display="flex" alignItems="center"
-        justifyContent="center">
-        <CircleOutlinedIcon onClick={capture} sx={{ height: 60, width: 60, zIndex: 'fab', color: 'black' }} />
-      </Box>
+          <CircleOutlinedIcon onClick={capture} sx={{ height: 60, width: 60, zIndex: 'fab', color: 'black' }} />
+        </Grid>
+      </Grid>
 
 
-    </Stack>
+    </Box>
   );
 }
