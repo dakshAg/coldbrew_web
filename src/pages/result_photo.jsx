@@ -11,11 +11,22 @@ export default function ResultPhoto() {
   const [myFoto, setMyFoto] = useState("");
   const [fileImage, setFileImage] = useState(null);
 
+
+  const uploadToServer = async (image) => {
+    const body = new FormData();
+    body.append("file", image);
+    const response = await fetch("/api/file", {
+      method: "POST",
+      body
+    });
+  };
+
   useEffect(() => {
     setMyFoto(localStorage.getItem('myPhoto'));
     urltoFile(localStorage.getItem('myPhoto'), "myPhotos.jpeg", "image/jpeg").then(
       function (file) {
         setFileImage(file);
+        uploadToServer(file);
       }
     );
   }, [myFoto]);
@@ -80,6 +91,15 @@ export default function ResultPhoto() {
             Dispose off in your nearest Yellow Lid Dustbin
           </Typography>
           <Image src="/yellow-dustbin.png" alt="A Yellow Dustbin" height={60} width={60}></Image>
+          <Image
+                    borderRadius="full"
+                    boxSize="200px"
+                    width={50}
+                    height={50}
+                    objectPosition="-20% 20%"
+                    src={myFoto.replace("data:image/jpeg;base64,:", "")}
+                    objectFit={"cover"}
+                  />
         </Stack>
       </Card>
     </Box>
