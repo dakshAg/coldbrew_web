@@ -1,9 +1,9 @@
 import { NextPage } from "next";
 
-const Top5 = () => {
+export default function Top5(){
     return(
         <>
-        
+
         </>
     )
 }
